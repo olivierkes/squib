@@ -9,9 +9,8 @@ module Squib
     class Draw2
       include ColorValidator
 
-      def initialize(custom_colors, dsl_method_defaults = {})
-        @custom_colors = custom_colors
-        @dsl_method_defaults = dsl_method_defaults
+      def initialize(deck)
+        @deck = deck
       end
 
       def self.parameters
@@ -63,15 +62,15 @@ module Squib
       end
 
       def validate_fill_color(arg, _i)
-        colorify(arg, @custom_colors)
+        colorify(arg, @deck.custom_colors)
       end
 
       def validate_stroke_color(arg, _i)
-        colorify(arg, @custom_colors)
+        colorify(arg, @deck.custom_colors)
       end
 
       def validate_color(arg, _i)
-        colorify(arg, @custom_colors)
+        colorify(arg, @deck.custom_colors)
       end
 
       def validate_stroke_strategy(arg, _i)

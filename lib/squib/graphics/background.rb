@@ -3,9 +3,9 @@ module Squib
 
     # :nodoc:
     # @api private
-    def background(color)
+    def background(draw)
       use_cairo do |cc|
-        cc.set_source_squibcolor(color)
+        cc.set_source_squibcolor(draw.color)
         cc.paint
       end
     end
