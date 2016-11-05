@@ -11,20 +11,20 @@ module Squib
     module ArgLoader
 
       # Main class invoked by the client (i.e. api/ methods)
-      def load!(args, expand_by: 1, layout: {}, dpi: 300)
+      def load!(args, expand_by: 1, layout: {}, deck_defaults: {}, dpi: 300)
         Squib.logger.debug { "ARG LOADER: load! for #{self.class}, args: #{args}" }
         @dpi = dpi
         args[:layout] = prep_layout_args(args[:layout], expand_by: expand_by)
-        expand_and_set_and_defaultify(args: args, by: expand_by, layout: layout)
+        expand_and_set_and_defaultify(args: args, by: expand_by, layout: layout, deck_defaults: deck_defaults)
         validate
         convert_units
         self
       end
 
-      def expand_and_set_and_defaultify(args: {}, by: 1, layout: {})
+      def expand_and_set_and_defaultify(args: {}, by: 1, layout: {}, deck_defaults: {})
         attributes = self.class.parameters.keys
         attributes.each do |p|
-          args[p] = defaultify(p, args, layout)
+          args[p] = defaultify(p, args, layout, deck_defaults)
           val = if expandable_singleton?(p, args[p])
                   [args[p]] * by
                 else
@@ -50,9 +50,10 @@ module Squib
       #           Defaut can be overriden for a given dsl method (@dsl_method_defaults)
       #           (e.g stroke width is 0.0 for text, non-zero everywhere else)
       #
-      def defaultify(p, args, layout)
+      def defaultify(p, args, layout, deck_defaults)
         return args[p] if args.key? p # arg was specified, no defaults used
         defaults = self.class.parameters.merge(@dsl_method_defaults || {})
+        defaults.merge! deck_defaults # override the DSL and global defaults
         args[:layout].map do |layout_arg|
           return defaults[p] if layout_arg.nil?  # no layout specified, use default
           unless layout.key? layout_arg.to_s     # specified a layout, but it doesn't exist in layout. Oops!

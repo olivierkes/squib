@@ -103,6 +103,7 @@ module Squib
     ##################
     require_relative 'api/background'
     require_relative 'api/data'
+    require_relative 'api/default'
     require_relative 'api/groups'
     require_relative 'api/image'
     require_relative 'api/save'

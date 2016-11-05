@@ -58,11 +58,12 @@ module Squib
       #
       #  The "default" is specified in the Args::*.parameters. This can be
       #  overriden for a given dsl method via @dsl_method_defaults. (e.g stroke
-      #  width is 0.0 for text, non-zero everywhere else)
+      #  width is 0.0 for text, non-zero everywhere else). Furthermore, the   #  user can set their own defaults via the `default` DSL method - which #  overrides all other defaults.
       #
       def defaultify(p)
         return @opts[p] if @opts.key? p          # (1) Use specified
         defaults = @arg_class.parameters.merge(@dsl_method_defaults || {})
+        defaults.merge! (@deck.defaults || {}) # user defaults override ours
         layout = @deck.layout
         @opts[:layout].map do |layout_arg|
           return defaults[p] if layout_arg.nil?  # (3a) no layout specified
