@@ -48,11 +48,6 @@ margin
 
   the margin around the entire image. Supports :doc:`/units`
 
-fill_color
-  default: ``:white``
-
-  Backdrop color. Supports :doc:`/colors`.
-
 file
   default: ``'showcase.png'``
 
@@ -63,3 +58,14 @@ file
 
 Examples
 --------
+
+This sample `lives here <https://github.com/andymeneely/squib/tree/master/samples/saves>`_.
+
+.. literalinclude:: ../../samples/saves/_showcase.rb
+  :language: ruby
+  :linenos:
+
+.. raw:: html
+
+  <img src="../saves/showcase_expected.png" class="figure">
+  <img src="../saves/showcase2_expected.png" class="figure">

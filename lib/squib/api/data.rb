@@ -1,8 +1,10 @@
 require 'roo'
 require 'csv'
+require 'yaml'
 require_relative '../args/input_file'
 require_relative '../args/import'
 require_relative '../args/csv_opts'
+require_relative '../import/data_frame'
 
 module Squib
 
@@ -12,7 +14,7 @@ module Squib
     import = Args::Import.new.load!(opts)
     s = Roo::Excelx.new(input.file[0])
     s.default_sheet = s.sheets[input.sheet[0]]
-    data = {}
+    data = Squib::DataFrame.new
     s.first_column.upto(s.last_column) do |col|
       header = s.cell(s.first_row, col).to_s
       header.strip! if import.strip?
@@ -39,14 +41,14 @@ module Squib
     csv_opts = Args::CSV_Opts.new(opts)
     table = CSV.parse(data, csv_opts.to_hash)
     check_duplicate_csv_headers(table)
-    hash = Hash.new
+    hash = Squib::DataFrame.new
     table.headers.each do |header|
       new_header = header.to_s
       new_header = new_header.strip if import.strip?
       hash[new_header] ||= table[header]
     end
     if import.strip?
-      new_hash = Hash.new
+      new_hash = Squib::DataFrame.new
       hash.each do |header, col|
         new_hash[header] = col.map do |str|
           str = str.strip if str.respond_to?(:strip)
@@ -66,6 +68,30 @@ module Squib
   end
   module_function :csv
 
+  # DSL method. See http://squib.readthedocs.io
+  def yaml(opts = {})
+    input = Args::InputFile.new(file: 'deck.yml').load!(opts)
+    import = Args::Import.new.load!(opts)
+    yml = YAML.load_file(input.file[0])
+    data = Squib::DataFrame.new
+    # Get a universal list of keys to ensure everything is covered.
+    keys = yml.map { |c| c.keys}.flatten.uniq
+    keys.each { |k| data[k] = [] } #init arrays
+    yml.each do |card|
+      # nil value if key isn't set.
+      keys.each { |k| data[k] << card[k] }
+    end
+    if block_given?
+      data.each do |header, col|
+        col.map! do |val|
+          yield(header, val)
+        end
+      end
+    end
+    explode_quantities(data, import.explode)
+  end
+  module_function :yaml
+
   # Check if the given CSV table has duplicate columns, and throw a warning
   # @api private
   def check_duplicate_csv_headers(table)
@@ -78,9 +104,9 @@ module Squib
 
   # @api private
   def explode_quantities(data, qty)
-    return data unless data.key? qty.to_s.strip
+    return data unless data.col? qty.to_s.strip
     qtys = data[qty]
-    new_data = {}
+    new_data = Squib::DataFrame.new
     data.each do |col, arr|
       new_data[col] = []
       qtys.each_with_index do |qty, index|
@@ -103,5 +129,9 @@ module Squib
       Squib.csv(opts)
     end
 
+    # DSL method. See http://squib.readthedocs.io
+    def yaml(opts = {})
+      Squib.yaml(opts)
+    end
   end
 end

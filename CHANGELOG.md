@@ -1,10 +1,61 @@
 # Squib CHANGELOG
 Squib follows [semantic versioning](http://semver.org).
 
-## v0.12.0 / Unreleased
+## v0.14.0 / Unreleased
+
+Features:
+* `circle` method now supports various `arc` options, so you can draw partial circles (#211) by @sparr
+* `save_sheet` method now supports `rtl` or "right-to-left", for easier duplex printing of backs (#204, #208) by @sparr
+* `yaml` method for reading in data, much like `csv` and `xlsx` by @blinks
+
+Special thanks to @sparr and @blinks for all of their work!!
+
+## v0.13.2 / 2017-01-27
+
+Bugs:
+* Bump dependencies to latest stable versions. Pango et al. to 3.1.1 and Cairo to 1.15.5. This fixes some compatibility issues we noticed on Linux and Macs.
+
+## v0.13.1 / 2017-01-06
+
+Bugs:
+* New Windows installations break because Rubygems looks for 1.15.4 and it's not there (yet). Locking into Cairo 1.15.3 and being more conservative from now on.
+
+## v0.13.0 / 2017-01-04
+
+Features:
+* `save_pdf`'s `crop marks` have a `:full` option that draw lines across the entire page.
+
+Bugs
+* Fix `Squib::DataFrame#to_pretty_text` modification issue (#191)
+* Downgraded Pango et al. back to 3.0.9 from 3.1.0 because there are bugs in the new gobject-introspection library.
 
 Chores:
-* Bumped dependency roo to 2.5.1.
+* Shrank the gem itself by ignoring test data. From about 5mb to 64kb - yay!
+* Bump roo to newest version (2.7.0).
+* Bumped Nokogiri to latest version (1.7.0).
+* Re-organized the samples folder for better regression and sanity testing prior to release.
+
+## v0.12.0 / 2016-12-02
+
+Features:
+* `save_pdf` now supports crop marks! These are lines drawn in the margins of a PDF file to help you cut. These can be enabled by setting `crop_marks: true` in your `save_pdf` call. Can be further customized with `crop_margin_bottom`, `crop_margin_left`, `crop_margin_right`, `crop_margin_top`, `crop_marks`, `crop_stroke_color`, `crop_stroke_dash`, and `crop_stroke_width` (#123)
+* `Squib.configure` allows you to set options programmatically, overriding your config.yml. This is useful for Rakefiles, and will be documented in my upcoming tutorial on workflows.
+* `Squib.enable_build_globally` and `Squib.disable_build_globally` are new convenience methods for working with the `SQUIB_BUILD` environment variable. Handy for Rakefiles and Guard sessions for turning certain builds on an off. Also will be documented in upcoming workflow tutorial.
+* The import methods `csv` and `xlsx` now return `Squib::DataFrame`, which behaves exactly as before - but has more cool features like being able to do `data.name` instead of `data['name']`. Also: check out `data.to_pretty_text`. Check out the docs. (#156)
+
+Bugs:
+* `showcase` works as expected when using `backend: svg` (#179)
+* Graphics will get flushed upon exit, so working under Guard with `backend: svg` is more reliable (#180)
+
+Docs:
+* Wrote out documentation for [Squib and GameIcons](http://squib.readthedocs.io/en/latest/guides/game_icons.html)
+* Wrote out documentation for Hello World! Dissected
+* Un-submoduled our samples and simply embedded them into the docs (e.g. [Squib Thinks in Arrays](http://squib.readthedocs.io/en/latest/arrays.html)). Lots of cleanup there
+* Wrote up [Squib in Action](http://squib.readthedocs.io/en/latest/guides/projects.html), which documents other Squib projects. Ask for yours to be put there!!
+
+Chores:
+* Bumped dependency roo to 2.5.1. Nothing that affects Squib users (probably).
+* Bumped graphics and text dependencies (cairo to 1.15.3, pango+rsvg et al. to 3.1.0). No new features for us, but some stability improvements.
 
 ## v0.11.0 / 2016-09-05
 

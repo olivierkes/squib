@@ -1,7 +1,6 @@
 The Mighty text Method
 ======================
 
-
 The :doc:`/dsl/text` method is a particularly powerful method with a ton of options. Be sure to check the option-by-option details in the DSL reference, but here are the highlights.
 
 Fonts
@@ -42,7 +41,7 @@ Hints
 Laying out text by typing in numbers can be confusing. What Squib calls "hints" is merely a rectangle around the text box. Hints can be turned on globally in the config file, using the :doc:`/dsl/hint` method, or in an individual text method. These are there merely for prototyping and are not intended for production. Additionally, these are not to be conflated with "rendering hints" that Pango and Cairo mention in their documentation.
 
 Extents
-------
+-------
 
 Sometimes you want size things based on the size of your rendered text. For example, drawing a rectangle around card's title such that the rectangle perfectly fits. Squib returns the final rendered size of the text so you can work with it afterward. It's an array of hashes that correspond to each card. The output looks like this::
 
@@ -56,7 +55,7 @@ will output::
   [{:width=>109, :height=>55}, {:width=>142, :height=>55}] # Hello was 109 pixels wide, World 142 pixels
 
 Embedding Images
-------------------
+----------------
 
 Squib can embed icons into the flow of text. To do this, you need to define text keys for Squib to look for, and then the corresponding files. The object given to the block is a ``TextEmbed``, which supports PNG and SVG. Here's a minimal example::
 
@@ -69,18 +68,48 @@ Markup
 
 See :ref:`Markup <text-markup>` in  :doc:`/dsl/text`.
 
-Examples
---------
+Samples
+-------
 
-  * Examples of all of the above are crammed into the ``text_options.rb`` sample `found here <https://github.com/andymeneely/squib/tree/master/samples/text_options.rb>`_
-  * The ``embed_text.rb`` sample has more examples of embedding text, which can be `found here <https://github.com/andymeneely/squib/tree/master/samples/embed_text.rb>`_
-  * The ``config_text_markup.rb`` sample demonstrates how quoting can be configured, `found here <https://github.com/andymeneely/squib/tree/master/samples/config_text_markup.rb>`_
+These samples are maintained in the `repository here <https://github.com/andymeneely/squib/tree/master/samples>`_ in case you need some of the assets referenced.
 
-And this one too:
+Sample: _text.rb
+^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../samples/text/_text.rb
+  :language: ruby
+  :linenos:
 
 .. raw:: html
 
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gist-embed/2.4/gist-embed.min.js"></script>
-  <code data-gist-id="52d7b8e332194946bc69" data-gist-file="_text.rb"></code>
-  <code data-gist-id="52d7b8e332194946bc69" data-gist-file="_text_00_expected.png"></code>
+  <img src="text/_text_00_expected.png" width=600 class="figure">
+
+Sample: text_options.rb
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../samples/text/_text_options.rb
+  :language: ruby
+  :linenos:
+
+Sample: embed_text.rb
+^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../samples/text/_embed_text.rb
+  :language: ruby
+  :linenos:
+
+
+Sample: config_text_markup.rb
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../samples/config/config_text_markup.rb
+  :language: ruby
+  :linenos:
+
+.. literalinclude:: ../samples/config/config_text_markup.yml
+  :language: ruby
+  :linenos:
+
+.. literalinclude:: ../samples/config/config_disable_quotes.yml
+  :language: ruby
+  :linenos:

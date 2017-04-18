@@ -11,6 +11,7 @@ _yardoc
 coverage
 docs/_build*
 doc/
+docs/_build
 lib/bundler/man
 pkg
 rdoc
@@ -28,6 +29,7 @@ samples/_img
 samples/_output/*.png
 samples/_output/*.pdf
 samples/_output/foo
+samples/**/_output/*
 rubocop.txt
 benchmarks/_output/*.png
 benchmarks/_output/*.pdf
@@ -36,3 +38,4 @@ samples/_output/*.svg
 *.sublime-workspace
 spec/samples/sanity.html
 spec/samples/_diffs/*.png
+.byebug_history

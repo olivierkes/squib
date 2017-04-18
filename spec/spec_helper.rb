@@ -46,6 +46,10 @@ def xlsx_file(file)
   "#{File.expand_path(File.dirname(__FILE__))}/data/xlsx/#{file}"
 end
 
+def yaml_file(file)
+  "#{File.expand_path(File.dirname(__FILE__))}/data/yaml/#{file}"
+end
+
 def project_template(file)
   "#{File.expand_path(File.dirname(__FILE__))}/../lib/squib/project_template/#{file}"
 end
@@ -118,7 +122,8 @@ def mock_cairo(strio)
     set_line_width stroke fill set_source scale render_rsvg_handle circle
     triangle line_to operator= show_page clip transform mask rectangle
     reset_clip antialias= curve_to matrix= pango_layout_path stroke_preserve
-    fill_preserve close_path set_dash set_line_cap set_line_join).each do |m|
+    fill_preserve close_path set_dash set_line_cap set_line_join
+    arc arc_negative).each do |m|
     allow(cxt).to receive(m) { |*args| strio << scrub_hex("cairo: #{m}(#{args})\n") }
   end
 

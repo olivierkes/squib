@@ -26,7 +26,7 @@ module Squib
     # Attributes for the width, height (in pixels) and number of cards
     # These are expected to be immuatble for the life of Deck
     # @api private
-    attr_reader :width, :height, :cards
+    attr_reader :width, :height, :cards, :progress_bar
 
     # Delegate these configuration options to the Squib::Conf object
     def_delegators :conf, :antialias, :backend, :count_format, :custom_colors, :dir,
@@ -73,6 +73,7 @@ module Squib
       if block_given?
         instance_eval(&block) # here we go. wheeeee!
       end
+      @cards.each { |c| c.finish! }
     end
 
     # Directly accesses the array of cards in the deck

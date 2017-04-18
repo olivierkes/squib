@@ -34,7 +34,7 @@ module Squib
       when :memory
         Cairo::ImageSurface.new(@width, @height)
       when :svg
-        Dir.mkdir @deck.dir unless Dir.exists?(@deck.dir)
+        FileUtils.mkdir_p @deck.dir unless Dir.exists?(@deck.dir)
         Cairo::SVGSurface.new(svgfile, @width, @height)
       else
         Squib.logger.fatal "Back end not recognized: '#{backend}'"
@@ -49,6 +49,14 @@ module Squib
       @cairo_context.save
       block.yield(@cairo_context)
       @cairo_context.restore
+    end
+
+    def finish!
+      begin
+        @cairo_surface.finish
+      rescue Cairo::SurfaceFinishedError
+        # do nothin - if it's already finished that's fine
+      end
     end
 
     ########################

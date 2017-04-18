@@ -14,7 +14,7 @@ describe Squib::Conf do
   end
 
   it 'parses the sample custom config' do
-    conf = Squib::Conf.load sample_file('custom-config.yml')
+    conf = Squib::Conf.load sample_file('config/custom-config.yml')
     expect(conf.progress_bars).to  be true
     expect(conf.text_hint).to      eq '#FF0000'
     expect(conf.custom_colors).to  eq({ 'foo' => '#ccc' })
@@ -34,6 +34,14 @@ describe Squib::Conf do
   it 'helps Andy get full coverage with a test on to_s' do
     conf = Squib::Conf.load conf('empty.yml')
     expect(conf.to_s).to start_with 'Conf: '
+  end
+
+  it 'allows Squib.configure to override yml' do
+    Squib.configure img_dir: 'color'
+    c = Squib::Conf.load conf('basic.yml')
+    expect(c.img_dir).to eq 'color'
+    # reset our state to be nice
+    Squib::USER_CONFIG.clear
   end
 
 end

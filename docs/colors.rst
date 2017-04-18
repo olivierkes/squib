@@ -40,7 +40,7 @@ by custom name
 In your ``config.yml``, as described in :doc:`/config`, you can specify custom names of colors. For example, ``'foreground'``.
 
 Gradients
---------
+---------
 
 In most places where colors are allowed, you may also supply a string that defines a gradient. Squib supports two flavors of gradients: linear and radial. Gradients are specified by supplying some xy coordinates, which are relative to the card (not the command). Each stop must be between ``0.0`` and ``1.0``, and you can supply as many as you like. Colors can be specified as above (in any of the hex notations or built-in constant). If you add two or more colors at the same stop, then the gradient keeps the colors in the in order specified and treats it like sharp transition.
 
@@ -60,5 +60,31 @@ In both of these formats, whitespace is ignored between tokens so as to make com
 
 If you need something more powerful than these two types of gradients (e.g. mesh gradients), then we suggest encapsulating your logic within an SVG and using the :doc:`/dsl/svg` method to render it.
 
-Examples
---------
+Samples
+-------
+
+Code is maintained in the `repository here <https://github.com/andymeneely/squib/tree/master/samples>`_ in case you need some of the assets referenced.
+
+Sample: colors and color constants
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../samples/colors/_colors.rb
+  :language: ruby
+  :linenos:
+
+.. raw:: html
+
+  <img src="colors/colors_00_expected.png" width=600 class="figure">
+
+  <img src="colors/color_constants_00_expected.png" width=600 class="figure">
+
+Sample: gradients
+^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../samples/colors/_gradients.rb
+  :language: ruby
+  :linenos:
+
+.. raw:: html
+
+  <img src="colors/gradient_00_expected.png" width=600 class="figure">

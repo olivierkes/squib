@@ -1,9 +1,11 @@
 The Squib Way pt 1: Zero to Game
 =================================
 
-.. warning::
+I've always felt that the Ruby community and the tabletop game design community had a lot in common, and a lot to learn from each other. Both are all about testing. All about iterative development. Both communities are collegial, creative, and fun.
 
-  Conversion from markdown not finished yet
+But the Ruby community, and the software development community generally, has a lot to teach us game designers about how to develop something. `Ruby has a "way" of doing things <http://therubyway.io/>`_ that is unique and helpful to game designers.
+
+In this series of guides, I'll introduce you to Squib's key features and I'll walk you through a basic prototype. We'll also take a more circuitous route than normal so that I can touch upon some key design principles and good software development habits so that you can make your Squib scripts maintainable, understandable, flexible, and changeable.
 
 Prototyping with Squib
 ----------------------
@@ -14,11 +16,12 @@ The key to prototyping tabletop games is *playtesting*. At the table. With human
 
 But! We also want to get the *second* (and third and fourth and fifth...) version of our game back to the playtesting table quickly, too. If we work with Squib from day one, our ability to react to feedback will be much smoother once we've laid the groundwork.
 
-In this series of guides, we'll introduce you to Squib's key features by also walking you through a basic prototype. We'll take a more circuitous route than normal so we can pick apart what Squib is actually doing so that we can leverage its features.
 
 Get Installed and Set Up
 -----------------------------
-The ordinary installation is like most Ruby gems::
+The ordinary installation is like most Ruby gems:
+
+.. code-block:: none
 
   $ gem install squib
 
@@ -30,7 +33,9 @@ Our Idea: Familiar Fights
 -------------------------
 Let's start with an idea for a game: Familiar Fights. Let's say we want to have players fight each other based on collecting cards that represent their familiars, each with different abilities. We'll have two factions: drones and humans. Each card will have some artwork in it, and some text describing their powers.
 
-First thing: the title. It stinks, I know. It's gonna change. So instead of naming the directory after our game and getting married to our bad idea, let's give our game a code name. I like to use animal names, so let's go with Arctic Lemming::
+First thing: the title. It stinks, I know. It's gonna change. So instead of naming the directory after our game and getting married to our bad idea, let's give our game a code name. I like to use animal names, so let's go with Arctic Lemming:
+
+.. code-block:: none
 
   $ squib new arctic-lemming
   $ cd arctic-lemming
@@ -138,7 +143,9 @@ So technically, these two lines are equivalent::
 
 Ok back to the game. We COULD just put our data into literal arrays. But that's considered bad programming practice (called *hardcoding*, where you put data  directly into your code). Instead, let's make use of our CSV data file.
 
-What the ``csv`` command does here is read in our file and create a hash of arrays. Each array is a column in the table, and the header to the colum is the key to the hash. To see this in action, check it out on Ruby's interactive shell (``irb``)::
+What the ``csv`` command does here is read in our file and create a hash of arrays. Each array is a column in the table, and the header to the colum is the key to the hash. To see this in action, check it out on Ruby's interactive shell (``irb``):
+
+.. code-block:: none
 
   $ irb
   2.1.2 :001 > require 'squib'

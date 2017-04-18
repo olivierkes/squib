@@ -1,10 +1,6 @@
 The Squib Way pt 2: Iconography
 ===================================
 
-.. warning::
-
-  This chapter is still being written
-
 In the previous guide, we walked you through the basics of going from ideas in your head to a very simple set of cards ready for playtesting at the table. In this guide we take the next step: creating a visual language.
 
 Art: Graphic Design vs. Illustration
@@ -30,7 +26,7 @@ The majority of the cards in RFTG have no description text on them, and yet the 
 
 But once you know the structure of the game and what various bonuses mean, you can understand new cards very easily. Icons are combined in creative ways to show new bonuses. Text is used only when a bonus is much more complicated than what can be expressed with icons. Icons are primarily arranged along left side of the card so you can hold them in your hand and compare bonuses across cards quickly. All of these design decisions match the gameplay nicely because the game consists of a lot of scrolling through cards in your hand and evaluating which ones you want to play.
 
-Go check out images of Race for the Galaxy `on BoardGameGeek.com <https://boardgamegeek.com/boardgame/28143/race-galaxy>`_.
+Go check out `images of Race for the Galaxy on BoardGameGeek.com <https://boardgamegeek.com/boardgame/28143/race-galaxy>`_.
 
 Dominion
 ^^^^^^^^
@@ -50,16 +46,17 @@ Squib is good for supporting any kind of layout you can think of, but it's also 
   * :doc:`/dsl/png` method, and all of its features like blending operators, alpha transparency, and masking
   * Layout files allow multiple icons for one data column (see :doc:`/layouts`)
   * Layout files also have the ``extends`` feature that allows icons to inherit details from each other
-  * The ``range`` option on :doc:`/dsl/text`, :doc:`/dsl/svg`, and :doc:`/dsl/png` allows you to specify text and icons for any subset of your files
+  * The ``range`` option on :doc:`/dsl/text`, :doc:`/dsl/svg`, and :doc:`/dsl/png` allows you to specify text and icons for any subset of your cards
   * The :doc:`/dsl/text` method allows for embedded icons.
-  * Ruby provides neat ways of aggregating data with ``inject``, ``map``, and ``zip`` that supports iconography
+  * The :doc:`/dsl/text` method allows for Unicode characters (if the font supports it).
+  * Ruby provides neat ways of aggregating data with ``inject``, ``map``, and ``zip`` that gives you ultimate flexibility for specifying different icons for different cards.
 
 Back to the Example: Drones vs. Humans
 --------------------------------------
 
 Ok, let's go back to our running example, project ``arctic-lemming`` from Part 1. We created cards for playtesting, but we never put down the faction for each card. That's a good candidate for an icon.
 
-Let's get some stock icons for this exercise. For this example, I went to http://game-icons.net. I set my foreground color to black, and background to white. I then  downloaded "auto-repair.svg" and "backup.svg". I'm choosing not to rename the files so that I can find them again on the website if I need to. (If you want to know how to do this process DIRECTLY from Ruby, and not going to the website, check out my *other* Ruby gem called `game_icons <https://github.com/andymeneely/game_icons>`_ - it's tailor-made for Squib!)
+Let's get some stock icons for this exercise. For this example, I went to http://game-icons.net. I set my foreground color to black, and background to white. I then downloaded "auto-repair.svg" and "backup.svg". I'm choosing not to rename the files so that I can find them again on the website if I need to. (If you want to know how to do this process DIRECTLY from Ruby, and not going to the website, check out my *other* Ruby gem called `game_icons <https://github.com/andymeneely/game_icons>`_ - it's tailor-made for Squib! We've got some documentation in :doc:`/guides/game_icons`
 
 When we were brainstorming our game, we placed one category of icons in a single column ("faction"). Presumably, one would want the faction icon to be in the same place on every card, but a different icon depending on the card's faction. There are a couple of ways of accomplishing this in Squib. First, here some less-than-clean ways of doing it::
 
@@ -115,7 +112,7 @@ At this point, we've got a very scalable design for our future iterations. Let's
 Why Ruby+YAML+Spreadsheets Works
 --------------------------------
 
-In software design, a "good" design is one where the problem is broken down into a set of easier duties that each make sense on their own, where the interaction between duties is easy, and where to place new responsbilities is obvious.
+In software design, a "good" design is one where the problem is broken down into a set of easier duties that each make sense on their own, where the interaction between duties is easy, and where to place new responsibilities is obvious.
 
 In Squib, we're using automation to assist the prototyping process. This means that we're going to have a bunch of decisions and responsibilities, such as:
 
@@ -137,16 +134,95 @@ The best way to preserve this design is to try to keep the Ruby code clean. As w
 
 Ok, let's get back to this prototype.
 
-Icons for Some, But Not All, Cards
-----------------------------------
+Illustration: One per Card
+--------------------------
+
+The cards are starting to come together, but we have another thing to do now. When playtesting, you need a way of visually identifying the card immediately. Reading text takes an extra moment to identify the card - wouldn't it be nice if we had some sort of artwork, individualized to the card?
+
+Of course, we're not going to commission an artist or do our own oil paintings just yet. Let's get some placeholder art in there. Back to GameIcons, we're going to use "ninja-mask.svg", "pirate-skull.svg", "shambling-zombie.svg", and "robot-golem.svg".
+
+Method 1: Put the file name in data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The difference between our Faction icon and our Illustration icon is that the Illustration needs to be different for every card. We already have a convenient way to do something different on every card - our CSV file!
+
+Here's how the CSV would look:
+
+.. raw:: html
+
+  <code data-gist-id="d2bb2eb028b27cf1dace"
+      data-gist-file="data_pt2_03.csv"></code>
+
+In our layout file we can center it in the middle of the card, nice and big. And then the Ruby & YAML would look like this:
+
+.. raw:: html
+
+  <code data-gist-id="d2bb2eb028b27cf1dace"
+      data-gist-file="_part2_03_illustrations.yml"
+      data-gist-highlight-line="12-16"></code>
+  <code data-gist-id="d2bb2eb028b27cf1dace"
+      data-gist-file="_part2_03_illustrations_m1.rb"
+      data-gist-highlight-line="14"></code>
+
+And our output will look like this:
+
+.. raw:: html
+
+  <code data-gist-id="d2bb2eb028b27cf1dace"
+      data-gist-file="_part2_03_illustrations_00.png"></code>
+
+
+Method 2: Map title to file name
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are some drawbacks to Method 1. First, you're putting artwork graphics info inside your game data. This can be weird and unexpected for someone new to your code (i.e. that person being you when you put your project down for a few months). Second, when you're working on artwork you'll have to look up what the name of every file is in your CSV. (Even writing this tutorial, I forgot that "zombie" is called "shambling-zombie.svg" and had to look it up, distracting me from focusing on writing.)
+
+There's another way of doing this, and it's more Ruby-like because it follows the `Convention over Configuration <https://en.wikipedia.org/wiki/Convention_over_configuration>`_ philosophy. The idea is to be super consistent with your naming so that you don't have to *configure* that, say, "pirate" has an illustration "pirate-skull". The illustration should be literally the title of the card - converted to lowercase because that's the convention for files. That means it should just be called "pirate.svg", and Squib should know to "just put an SVG that is named after the title". Months later, when you want to edit the illustration for pirate, you will probably just open "pirate.svg".
+
+To do this, you'll need to convert an array of Title strings from your CSV (``data['title']`` to an array of file names. Ruby's ``map`` was born for this.
 
 .. note::
 
-  to be written
+  If you're new to Ruby, here's a quick primer. The ``map`` method gets run on every element of an array, and it lets you specify a *block* (either between curly braces for one line or between ``do`` and ``end`` for multiple lines). It then returns another Array of the same size, but with every value mapped using your block. So::
 
-One Column per Icon
--------------------
+  [1, 2, 3].map { |x| 2 * x }             # returns [2, 4, 6]
+  [1, 2, 3].map { |x| "$#{x}" }           # returns ["$1", "$2", "$3"]
+  ['NARF', 'ZORT'].map { |x| x.downcase } # returns ['narf', 'zort']
 
-.. note::
 
-  to be written
+
+Thus, if we rename our illustration files from "pirate-skull.svg" to "pirate.svg", we can have CSV data that's JUST game data:
+
+.. raw:: html
+
+  <code data-gist-id="d2bb2eb028b27cf1dace"
+    data-gist-file="data.csv"
+    data-gist-highlight-line="14"></code>
+
+And our Ruby code will figure out the file name:
+
+.. raw:: html
+
+  <code data-gist-id="d2bb2eb028b27cf1dace"
+      data-gist-file="_part2_03_illustrations_m2.rb"
+      data-gist-highlight-line="3,14-15"></code>
+
+And our output images look identical to Method 1.
+
+Learn by Example
+----------------
+
+In my game, Your Last Heist, I use some similar methods as above:
+
+  * `Use a different background depending <https://github.com/andymeneely/project-timber-wolf/blob/156a5d417dd8021e3f391a67c08b8e9f06f58c2b/src/characters.rb#L14-L16>`_ on if the character is level 1 or 2. Makes use of `Ruby's ternary operator <https://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Control_Structures#short-if_expression_.28aka_ternary_operator.29>`_.
+  * `Only put an image if the data is non-nil <https://github.com/andymeneely/project-timber-wolf/blob/156a5d417dd8021e3f391a67c08b8e9f06f58c2b/src/characters.rb#L19-L21>`_. Some characters have a third skill, others do not. Only load a third skill image if they have a third skill. This line leverages the fact that when you do ``svg file: nil``, the ``svg`` simply does nothing.
+  * `Method 2 from above, but into its own directory <https://github.com/andymeneely/project-timber-wolf/blob/156a5d417dd8021e3f391a67c08b8e9f06f58c2b/src/characters.rb#L23>`_.
+  * `Use different-sized backdrops depending on the number of letters in the text <https://github.com/andymeneely/project-timber-wolf/blob/156a5d417dd8021e3f391a67c08b8e9f06f58c2b/src/characters.rb#L24-L31>`_. This one is cool because I can rewrite the description of a card, and it will automatically figure out which backdrop to use based on how many letters the text has. This makes use of `Ruby's case-when expression <https://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Control_Structures#case_expression>`_.
+  * After saving the regular cards, we end our script by `creating some annotated figures <https://github.com/andymeneely/project-timber-wolf/blob/156a5d417dd8021e3f391a67c08b8e9f06f58c2b/src/characters.rb#L68-L76>`_ for the rulebook by drawing some text on top of it and saving it using ``showcase``.
+
+Are We Done?
+------------
+
+At this stage, you've got most of what you need to build a game from prototype through completion. Between images and text, you can do pretty much anything. Squib does much more, of course, but these are the basic building blocks.
+
+But, prototyping is all about speed and agility. The faster you can get what you need, the sooner you can playtest, and the sooner you can make it better. Up next, we'll be looking at workflow: ways to help you get what you need quickly and reliably.
