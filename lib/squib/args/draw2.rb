@@ -33,6 +33,19 @@ module Squib
         [:stroke_width]
       end
 
+      # THIS IS WHAT I REALLY WANT!!
+      # ...instead of validate_join
+      def join=(arg)
+        @join = case arg.to_s.strip.downcase
+                when 'miter'
+                  Cairo::LINE_JOIN_MITER
+                when 'round'
+                  Cairo::LINE_JOIN_ROUND
+                when 'bevel'
+                  Cairo::LINE_JOIN_BEVEL
+                end
+      end
+
       def validate_join(arg, _i)
         case arg.to_s.strip.downcase
         when 'miter'
