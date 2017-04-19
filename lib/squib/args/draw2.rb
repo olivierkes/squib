@@ -25,8 +25,8 @@ module Squib
         }
       end
 
-      def self.expanding_parameters
-        parameters.keys # all of them are expandable
+      def self.expanding?
+        true
       end
 
       def self.params_with_units
@@ -46,29 +46,18 @@ module Squib
                 end
       end
 
-      def validate_join(arg, _i)
-        case arg.to_s.strip.downcase
-        when 'miter'
-          Cairo::LINE_JOIN_MITER
-        when 'round'
-          Cairo::LINE_JOIN_ROUND
-        when 'bevel'
-          Cairo::LINE_JOIN_BEVEL
-        end
+      def cap=(arg)
+        @cap = case arg.to_s.strip.downcase
+                when 'butt'
+                  Cairo::LINE_CAP_BUTT
+                when 'round'
+                  Cairo::LINE_CAP_ROUND
+                when 'square'
+                  Cairo::LINE_CAP_SQUARE
+                end
       end
 
-      def validate_cap(arg, _i)
-        case arg.to_s.strip.downcase
-        when 'butt'
-          Cairo::LINE_CAP_BUTT
-        when 'round'
-          Cairo::LINE_CAP_ROUND
-        when 'square'
-          Cairo::LINE_CAP_SQUARE
-        end
-      end
-
-      def validate_dash(arg, _i)
+      def dash=
         arg.to_s.split.collect do |x|
           UnitConversion.parse(x, @dpi).to_f
         end
@@ -82,8 +71,8 @@ module Squib
         colorify(arg, @deck.custom_colors)
       end
 
-      def validate_color(arg, _i)
-        colorify(arg, @deck.custom_colors)
+      def color=(arg)
+        @color = colorify(arg, @deck.custom_colors)
       end
 
       def validate_stroke_strategy(arg, _i)
